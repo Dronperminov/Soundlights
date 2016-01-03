@@ -56,6 +56,7 @@
             this.portListBox.Size = new System.Drawing.Size(94, 21);
             this.portListBox.Sorted = true;
             this.portListBox.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.portListBox, "Выбор порта для подключения к устройству");
             this.portListBox.SelectedIndexChanged += new System.EventHandler(this.portListBox_SelectedIndexChanged);
             this.portListBox.Click += new System.EventHandler(this.portListBox_Click);
             // 
@@ -79,6 +80,7 @@
             this.agcCheckBox.Size = new System.Drawing.Size(48, 17);
             this.agcCheckBox.TabIndex = 2;
             this.agcCheckBox.Text = "АРУ";
+            this.toolTip1.SetToolTip(this.agcCheckBox, "Автоматическая регулировка громкости");
             this.agcCheckBox.UseVisualStyleBackColor = true;
             // 
             // fadeCheckBox
@@ -91,6 +93,7 @@
             this.fadeCheckBox.Size = new System.Drawing.Size(50, 17);
             this.fadeCheckBox.TabIndex = 3;
             this.fadeCheckBox.Text = "Fade";
+            this.toolTip1.SetToolTip(this.fadeCheckBox, "Включение световых эффектов");
             this.fadeCheckBox.UseVisualStyleBackColor = true;
             // 
             // redBar
@@ -102,6 +105,7 @@
             this.redBar.Size = new System.Drawing.Size(45, 104);
             this.redBar.TabIndex = 4;
             this.redBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.toolTip1.SetToolTip(this.redBar, "Уровень усиления красного канала");
             this.redBar.Scroll += new System.EventHandler(this.redBar_Scroll);
             this.redBar.ValueChanged += new System.EventHandler(this.redBar_ValueChanged);
             // 
@@ -114,6 +118,7 @@
             this.greenBar.Size = new System.Drawing.Size(45, 104);
             this.greenBar.TabIndex = 5;
             this.greenBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.toolTip1.SetToolTip(this.greenBar, "Уровень усиления зелёного канала");
             this.greenBar.Scroll += new System.EventHandler(this.greenBar_Scroll);
             this.greenBar.ValueChanged += new System.EventHandler(this.greenBar_ValueChanged);
             // 
@@ -126,6 +131,7 @@
             this.blueBar.Size = new System.Drawing.Size(45, 104);
             this.blueBar.TabIndex = 6;
             this.blueBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.toolTip1.SetToolTip(this.blueBar, "Уровень усиления синего канала");
             this.blueBar.Scroll += new System.EventHandler(this.blueBar_Scroll);
             this.blueBar.ValueChanged += new System.EventHandler(this.blueBar_ValueChanged);
             // 

@@ -17,12 +17,13 @@ namespace Soundlights
         [FieldOffset(0)]
         public float[] floats;
     }
+
     public partial class Soundlights : Form
     {
         const int RGB_FADE_EFFECT = 0;
         const int FADE_EFFECT = 1;
 
-        bool connected = false;
+        bool connected = false; // глобальный флаг состояния соединения с устройством
 
         IWaveIn waveIn;
 
@@ -44,14 +45,13 @@ namespace Soundlights
         float[] valuesScale = new float[numBands]; // значения корректировки яркости каналов
         float[] outputScale = new float[numBands] { 1000f, 1000f, 1000f }; //
 
-        // Fadig
         int steps = 255; // количество шагов переливания цвета
         int step = 0; // текущий шаг
 
         Random rnd = new Random();
         Random rnd_step = new Random();
 
-        int[,] colors = new int[2, numBands];
+        int[,] colors = new int[2, numBands]; // массив из двух цветов для RGB fading'а
 
         // значения границ частотного диапазона для вычисления амплитуды каналов
         int[] bandDefs = new int[numBands - 1] {
@@ -65,6 +65,7 @@ namespace Soundlights
             InitializeComponent();
         }
 
+        // Инициализация начальных значений переменных
         private void Soundlights_Load(object sender, EventArgs e)
         {
             getPortNames();
@@ -92,6 +93,7 @@ namespace Soundlights
             components_visibility(connected);
         }
 
+        // Плавное переливание цветом, генерация случайного нового цвета и количество шагов переливания
         private void RgbTimer_Tick(object sender, EventArgs e)
         {
             if (step > steps)
@@ -110,6 +112,7 @@ namespace Soundlights
             step++;
         }
 
+        // Управление отображением омпонентов в зависимости от состояния соединения с устройством
         private void components_visibility(bool is_connected)
         {
             portListBox.Enabled = !is_connected;
@@ -170,6 +173,7 @@ namespace Soundlights
             connectedPort.PortName = portListBox.Text;
         }
 
+        // Обработка нажатия кнопки подключения/отключения
         private void connectBtn_Click(object sender, EventArgs e)
         {
             if (!connected)
@@ -236,11 +240,13 @@ namespace Soundlights
             }
         }
 
+        // Функция, возвращающая коэффициент окна Блэкмана
         private float blackmanWindow(int n, int size)
         {
             return (float)(0.42 - 0.5 * Math.Cos(2 * Math.PI * n / (size - 1)) + 0.08 * Math.Cos(4 * Math.PI * n / (size - 1)));
         }
         
+        // Событие записи для объекта Wave - анализ сигнала с управлением автоподстройкой и световыми эффектами
         private void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
             int samplesRecorded = e.BytesRecorded / (waveIn.WaveFormat.BitsPerSample / 8); // размер полученного буфера
@@ -339,7 +345,7 @@ namespace Soundlights
 
                 for (int i = 0; i < numBands; i++)
                 {
-                    values[i] = (float)Math.Sqrt(values[i]) * outputScale[i] * valuesScale[i];
+                    values[i] = (float)Math.Sqrt(values[i]) * valuesScale[i];
                 }
             }
             else
@@ -382,37 +388,44 @@ namespace Soundlights
             }
         }
 
+        // Освобождение памяти от объекта Wave
         private void WaveIn_RecordingStopped(object sender, StoppedEventArgs e)
         {
             waveIn.Dispose();
             waveIn = null;
         }
 
+        // Передача значения НЧ регулятора в значение корректировки НЧ канала
         private void redBar_ValueChanged(object sender, EventArgs e)
         {
-            valuesScale[0] = (float)((redBar.Value + 10) / 10.0);
+            valuesScale[0] = (float)((redBar.Value + 10) / 10.0) * 1000;
         }
 
+        // Передача значения СЧ регулятора в значение корректировки СЧ канала
         private void greenBar_ValueChanged(object sender, EventArgs e)
         {
-            valuesScale[1] = (float)((greenBar.Value + 10) / 10.0);
+            valuesScale[1] = (float)((greenBar.Value + 10) / 10.0) * 1000;
         }
 
+        // Передача значения ВЧ регулятора в значение корректировки ВЧ канала
         private void blueBar_ValueChanged(object sender, EventArgs e)
         {
-            valuesScale[2] = (float)((blueBar.Value + 10) / 10.0);
+            valuesScale[2] = (float)((blueBar.Value + 10) / 10.0) * 1000;
         }
 
+        // Добавление подсказки со значением НЧ регулятора
         private void redBar_Scroll(object sender, EventArgs e)
         {
             barsToolTip.SetToolTip(redBar, redBar.Value.ToString());
         }
 
+        // Добавление подсказки со значением СЧ регулятора 
         private void greenBar_Scroll(object sender, EventArgs e)
         {
             barsToolTip.SetToolTip(greenBar, greenBar.Value.ToString());
         }
 
+        // Добавление подсказки со значением ВЧ регулятора
         private void blueBar_Scroll(object sender, EventArgs e)
         {
             barsToolTip.SetToolTip(blueBar, blueBar.Value.ToString());
